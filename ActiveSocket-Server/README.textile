@@ -1,0 +1,3 @@
+h1. ActiveSocket Server
+
+ActiveSocket is described "here":https://github.com/keithmgould/ActiveSocket-Client/tree/master. The server is not threaded (at this point), and queuing is built-in for free care of *nix (um, I did not test Microsoft.)

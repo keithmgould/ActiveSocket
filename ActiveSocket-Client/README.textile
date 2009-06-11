@@ -1,0 +1,96 @@
+h1. ActiveSocket
+
+ActiveSocket allows you to easily create fast services over TCP sockets.  ActiveSocket::Base extends ActiveRecord::Base, and over-rides where necessary so that the actual model (and corresponding database) reside on the "other side":https://github.com/keithmgould/ActiveSocket-Server/tree/master of a TCP socket connection.
+
+h2. Motivation
+
+As SOA becomes more prevalent in the Rails community, we need tools to allow us to build services quickly and easily.  Micro web-frameworks such as Sinatra are good when the service is offered to strangers.  However when both the service and client are inside our control, there is no need to waste time with XML over HTTP over TCP/IP.  Furthermore, there is no need to waste time on routing (URL parsing), which is notoriously expensive.
+
+h2. ActiveSocket Knows Your Models
+
+Client side, at model initialization (which is app initialization in Rails production), ActiveSocket models hit the "AS-server":https://github.com/keithmgould/ActiveSocket-Server/tree/master to determine the model's structure.  This means your ActiveSocket models will not only have proper columns defined (to assist with AR goodies), but any custom methods defined on your model server-side will be identified locally and properly handled (see example below.)
+
+h2. Benchmarks
+
+ActiveSocket vs Net/HTTP (xml web-service) yields a 3x speed performance, end to end.
+
+h2. Lines of Code
+
+Currently, both client plugin and "server":https://github.com/keithmgould/ActiveSocket-Server/tree/master are under 200 LoC.
+
+h2. Install
+
+* The client is currently a plugin:
+	<pre><code>
+	script/plugin install git@github.com:keithmgould/ActiveSocket-Client.git
+	</code></pre>
+	
+* All you need to do on the "server":https://github.com/keithmgould/ActiveSocket-Server/tree/master is include environment, the library and declare the port:
+
+		<pre><code>
+		#require your environment
+		require(File.join(File.dirname(__FILE__), 'config', 'environment'))
+
+		#assuming AS module required in environment...
+		include ActiveSocket 
+
+		#start her up!
+		ActiveSocketServer.new(4001)
+		</code></pre>
+
+h2. Use Case
+
+Any internal web-service can be replaced with ActiveSocket.  On the client side, you may replace client code with a simple model declaration (a blog service, an authentication service, etc...) and work against it (see Usage below.)
+
+h2. Example
+
+* Model (server side):
+
+	<pre><code>
+	class Blog < ActiveRecord::Base
+	    def self.find_most_popular_blog
+	        #returns most popular blog...
+	    end
+
+        def determine_ranking
+            #returns ranking of this blog
+        end
+	end
+	</code></pre>
+
+* Model (client side):
+
+	<pre><code>
+	class Blog < ActiveSocket::Base
+		active_socket_settings :host => "27.4.4.8", :port => 4001
+	end
+	</code></pre>
+
+* Usage (client side):
+
+	<pre><code>
+	b = Blog.new
+	=> #<Blog id: nil, owner_id: nil, name: nil, created_at: nil, updated_at: nil>
+
+	#all AR find features supported, including dynamic methods...
+	b = Blog.first
+	b = Blog.find_by_name "foo"
+	b = Blog.find_by_sql "Select * from blogs where id = 27"
+	
+	#custom class methods identified and passed back to server, returning response
+	b = Blog.find_most_popular_blog 		
+	
+	#custom instance methods identified and passed back to server, returning response
+	ranking = b.determine_ranking 				
+	</code></pre>
+
+* As you can see, the usage is transparent.  Same for other CRUD operations:
+
+	<pre><code>
+	b.name = "New Name"
+	=> "New Name"
+	b.save
+	=> true
+	</code></pre>
+
+Copyright (c) 2009 Keith Gould, released under the MIT license
