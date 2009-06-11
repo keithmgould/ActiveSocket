@@ -1,6 +1,6 @@
 h1. ActiveSocket
 
-ActiveSocket allows you to easily create fast services over TCP sockets.  ActiveSocket::Base extends ActiveRecord::Base, and over-rides where necessary so that the actual model (and corresponding database) reside on the "other side":https://github.com/keithmgould/ActiveSocket-Server/tree/master of a TCP socket connection.
+ActiveSocket allows you to easily create fast services over TCP sockets.  ActiveSocket::Base extends ActiveRecord::Base, and over-rides where necessary so that the actual model (and corresponding database) reside on the other side of a TCP socket connection.
 
 h2. Motivation
 
@@ -8,7 +8,7 @@ As SOA becomes more prevalent in the Rails community, we need tools to allow us 
 
 h2. ActiveSocket Knows Your Models
 
-Client side, at model initialization (which is app initialization in Rails production), ActiveSocket models hit the "AS-server":https://github.com/keithmgould/ActiveSocket-Server/tree/master to determine the model's structure.  This means your ActiveSocket models will not only have proper columns defined (to assist with AR goodies), but any custom methods defined on your model server-side will be identified locally and properly handled (see example below.)
+Client side, at model initialization (which is app initialization in Rails production), ActiveSocket models hit the AS-server to determine the model's structure.  This means your ActiveSocket models will not only have proper columns defined (to assist with AR goodies), but any custom methods defined on your model server-side will be identified locally and properly handled (see example below.)
 
 h2. Benchmarks
 
@@ -16,7 +16,7 @@ ActiveSocket vs Net/HTTP (xml web-service) yields a 3x speed performance, end to
 
 h2. Lines of Code
 
-Currently, both client plugin and "server":https://github.com/keithmgould/ActiveSocket-Server/tree/master are under 200 LoC.
+Currently, both client plugin and server are under 200 LoC.
 
 h2. Install
 
@@ -25,7 +25,7 @@ h2. Install
 	script/plugin install git@github.com:keithmgould/ActiveSocket-Client.git
 	</code></pre>
 	
-* All you need to do on the "server":https://github.com/keithmgould/ActiveSocket-Server/tree/master is include environment, the library and declare the port:
+* All you need to do on the server is include environment, the library and declare the port:
 
 		<pre><code>
 		#require your environment
