@@ -1,11 +1,13 @@
 module ActiveSocket
   
-  #ruby modules
+  #ruby libraries
+  require "rubygems"
   require "socket"
   require "json"
   
   #active socket
   require File.dirname(__FILE__) + '/../common/protocol'
-  Dir.glob(File.join(File.dirname(__FILE__), '/active_socket/*.rb')).each {|f| require f }
+  require File.dirname(__FILE__) + '/processors'
+  require File.dirname(__FILE__) + '/server'
 
 end

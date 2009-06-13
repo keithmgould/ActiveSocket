@@ -92,16 +92,27 @@ module ActiveSocket
         return Protocol.pack(response)
       end
       
+      # passalong_object is a method used to pass along a method (and arguments)
+      # from client to server.  Passalong processes the request and returns the 
+      # results
       def passalong_object(model,body)
         Global.log.debug "in passalong"
         request = Protocol.unpack(body)
+        
+        #if type is a class
         if request[:t] == "c"
           response = model.classify.constantize.send(request[:m],*request[:a]) 
+        
+        #else type is an object
         else
           #ensure the object is of proper type:
           if request[:o] && request[:o].class.to_s == model.to_s
             response = {}
-            response[:r] = request[:o].send(request[:m], *request[:a])
+            if request[:a]
+              response[:r] = request[:o].send(request[:m], *request[:a])
+            else
+              response[:r] = request[:o].send(request[:m])
+            end
             response[:o] = request[:o]
           else
             Global.log.debug "packed object does not match expected Class type"
@@ -111,6 +122,10 @@ module ActiveSocket
         return Protocol.pack(response) 
       end
     
+      # Process_connection is used when ActiveSocket needs to process lower-level
+      # ActiveRecord requests.  In these cases all calls to connection (client-side)
+      # are passed to server via process_connection.  This is not encouraged as there
+      # is typically heavy back&forth and is therefore expensive.
       def process_connection(model, body)
         Global.log.debug "in process connection"
         found = Protocol.unpack(body)
@@ -121,6 +136,10 @@ module ActiveSocket
         return Protocol.pack(trying)
       end
     
+      # reveal structure is called by the client at model initialization.
+      # attributes and custom class/instance methods are returned.
+      # This is crucial, as it lets the client know how to respond to method
+      # requests.
       def reveal_structure(model)
         Global.log.debug "in reveal structure!"
         c = model.classify.constantize

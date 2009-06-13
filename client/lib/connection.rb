@@ -1,5 +1,5 @@
 module ActiveSocket
-  require File.dirname(__FILE__) + '/../../../common/protocol'
+  require File.dirname(__FILE__) + '/../../common/protocol'
   
   # The ActiveSocket Connection class serves a few functions:
   # 1) It overrides the ActiveRecord Connection class and via method missing
@@ -27,7 +27,6 @@ module ActiveSocket
       begin
         session = TCPSocket.open(@host, @port)
       rescue
-        Rails.logger.debug "failure: could not open connection to server: #{$!}"
         return "failure: could not open connection to server: #{$!}"
       end
     
@@ -37,9 +36,7 @@ module ActiveSocket
       else
         message = "#{request_type}:#{model}\n"
       end
-      #puts "sending #{message}"
       session.write(message)
-      #puts "waiting for response..."
       if session.eof?
         response = "we got disconnected :("
       else

@@ -1,8 +1,9 @@
 module ActiveSocket
+  require 'rubygems'
   require 'socket'
   require 'activerecord'
-  require File.dirname(__FILE__) + '/activesocket/connection'
-  require File.dirname(__FILE__) + '/activesocket/crud'
+  require File.dirname(__FILE__) + '/connection'
+  require File.dirname(__FILE__) + '/crud'
   
   class Base < ActiveRecord::Base
     self.abstract_class = true
@@ -37,7 +38,7 @@ module ActiveSocket
       
       private
       
-      # this guy just passes methods along to server for straght eval.
+      # this guy just passes methods along to server.
       def pass_along_class_method(meth_name, args)
         request = {:t => 'c', :m => meth_name, :a => args}
         communicate("passalong", class_name, request)
