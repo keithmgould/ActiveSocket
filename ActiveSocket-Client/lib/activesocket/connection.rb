@@ -1,5 +1,5 @@
 module ActiveSocket
-  require 'lib/protocol'
+  require File.dirname(__FILE__) + '/protocol'
   
   # The ActiveSocket Connection class serves a few functions:
   # 1) It overrides the ActiveRecord Connection class and via method missing

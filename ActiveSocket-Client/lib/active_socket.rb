@@ -1,7 +1,8 @@
 module ActiveSocket
   require 'socket'
-  require 'lib/connection'
-  require 'lib/crud'
+  require 'activerecord'
+  require File.dirname(__FILE__) + '/activesocket/connection'
+  require File.dirname(__FILE__) + '/activesocket/crud'
   
   class Base < ActiveRecord::Base
     self.abstract_class = true
