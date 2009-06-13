@@ -1,5 +1,5 @@
 require 'test/unit'
-require File.dirname(__FILE__) + '/../lib/activesocket/protocol'
+require File.dirname(__FILE__) + '/../../common/protocol'
 include ActiveSocket
 
 class ProtocolTest < Test::Unit::TestCase
@@ -14,7 +14,7 @@ class ProtocolTest < Test::Unit::TestCase
   
   def test_complex_valid_protocol_inputs
     input = Object.new
-    input.instance_variable_set(:@a, "bar")
+    input.instance_variable_set(:@foo, "bar")
     assert_valid_input(input)
   end
   

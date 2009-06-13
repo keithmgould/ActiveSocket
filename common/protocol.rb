@@ -2,7 +2,7 @@
 # people will probably have better algorithms.
 
 # Background: I could not find out how to escape '\' in low level IO communication, and
-# ruby marshalling makes use of thes characters.  So I had to take the marshalled objects
+# ruby marshalling makes use of these characters.  So I had to take the marshalled objects
 # and further sanitize.
 
 # Currently, I'm getting an average ratio between marshalled string and final string of 1.5
