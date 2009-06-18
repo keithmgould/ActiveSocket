@@ -1,6 +1,6 @@
 h1. ActiveSocket
 
-ActiveSocket allows you to easily create fast services over TCP sockets.  ActiveSocket::Base extends ActiveRecord::Base, and over-rides where necessary so that the actual model (and corresponding database) reside on the other side of a TCP socket connection.
+ActiveSocket allows instant Service Oriented Architecture (SOA).  ActiveSocket::Base extends ActiveRecord::Base, and over-rides only where necessary so that the actual model resides on the other side of a TCP socket connection.  There is no API to create/learn; simply treat the model as if it were local.
 
 h2. Motivation
 
