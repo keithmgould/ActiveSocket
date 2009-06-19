@@ -27,7 +27,8 @@ module ActiveSocket
       begin
         session = TCPSocket.open(@host, @port)
       rescue
-        return "failure: could not open connection to server: #{$!}"
+        ActiveSocket.log.warn "failure: could not open connection to server: #{$!}"
+        return false
       end
     
       if request
@@ -38,11 +39,12 @@ module ActiveSocket
       end
       session.write(message)
       if session.eof?
-        response = "we got disconnected :("
+        ActiveSocket.log.debug "disconnected."
+        response = false
       else
         raw_response = session.gets
         session.close
-        response = Protocol.unpack(raw_response) 
+        response =  Protocol.unpack(raw_response)
       end
       return response
     end

@@ -15,7 +15,7 @@ module ActiveSocket
     private
 
     def wait_for_client
-      Global.log.debug "\nwaiting for a client"
+      ActiveSocket.log.debug "\nwaiting for a client"
       while (@session = @serverSocket.accept) 
         help_client
         return if @session.closed?
@@ -23,7 +23,7 @@ module ActiveSocket
     end
 
     def help_client
-      Global.log.debug "helping a client"
+      ActiveSocket.log.debug "helping a client"
       while 1
         wait_for_message
         return if @session.closed?
@@ -32,7 +32,7 @@ module ActiveSocket
 
     def wait_for_message
       if @session.eof?
-        Global.log.debug "they left :("
+        ActiveSocket.log.debug "they left :("
         @session.close
         return
       else

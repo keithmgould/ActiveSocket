@@ -6,7 +6,7 @@ module ActiveSocket
       def process_message(message)
         begin
           command, model, body = message.chomp.split(":")
-          Global.log.debug "processing: #{command} on #{model}"
+          ActiveSocket.log.debug "processing: #{command} on #{model}"
           case command
             when 'passalong'
               response = passalong_object(model, body)
@@ -30,7 +30,7 @@ module ActiveSocket
         rescue
          # Note: we should never need to get rescued.
          # If we do, fortify offending method below.
-         Global.log.warn "failed in process_message: #{$!}"
+         ActiveSocket.log.warn "failed in process_message: #{$!}"
          response = Protocol.pack("failure: unable to process message: #{$!}")
         end
         return (response + "\n")
@@ -58,7 +58,7 @@ module ActiveSocket
       end
      
       def update_object(model,body)
-        Global.log.debug "in process update"
+        ActiveSocket.log.debug "in process update"
         args = Protocol.unpack(body)
         obj = model.classify.constantize.find(args[:id])
         if obj
@@ -73,7 +73,7 @@ module ActiveSocket
       end
     
       def destroy_object(model,body)
-        Global.log.debug "in process destroy"
+        ActiveSocket.log.debug "in process destroy"
         obj_id = Protocol.unpack(body) if body
         obj = model.classify.constantize.find(obj_id)
         if obj
@@ -85,7 +85,7 @@ module ActiveSocket
       end
     
       def delete_object(model,body = nil)
-        Global.log.debug "in process delete"
+        ActiveSocket.log.debug "in process delete"
         conditions = Protocol.unpack(body) if body
       
         response = model.classify.constantize.delete_all(conditions)
@@ -96,7 +96,7 @@ module ActiveSocket
       # from client to server.  Passalong processes the request and returns the 
       # results
       def passalong_object(model,body)
-        Global.log.debug "in passalong"
+        ActiveSocket.log.debug "in passalong"
         request = Protocol.unpack(body)
         
         #if type is a class
@@ -115,7 +115,7 @@ module ActiveSocket
             end
             response[:o] = request[:o]
           else
-            Global.log.debug "packed object does not match expected Class type"
+            ActiveSocket.log.debug "packed object does not match expected Class type"
             response[:r] = false
           end
         end
@@ -127,7 +127,7 @@ module ActiveSocket
       # are passed to server via process_connection.  This is not encouraged as there
       # is typically heavy back&forth and is therefore expensive.
       def process_connection(model, body)
-        Global.log.debug "in process connection"
+        ActiveSocket.log.debug "in process connection"
         found = Protocol.unpack(body)
         attempted = found[:attempted]
         args = found[:args]
@@ -141,7 +141,7 @@ module ActiveSocket
       # This is crucial, as it lets the client know how to respond to method
       # requests.
       def reveal_structure(model)
-        Global.log.debug "in reveal structure!"
+        ActiveSocket.log.debug "in reveal structure!"
         c = model.classify.constantize
 
         # gather the custom class and instance methods

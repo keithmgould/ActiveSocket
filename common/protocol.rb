@@ -19,7 +19,7 @@ module ActiveSocket
       begin
         obj = Marshal::load(marshalled_response)
       rescue
-        Global.log.debug "failure: could not Marshal::load: #{$!}"
+        ActiveSocket.log.debug "failure: could not Marshal::load: #{$!}"
         obj = "failure: could not Marshal::load: #{$!}"
       end
       return obj

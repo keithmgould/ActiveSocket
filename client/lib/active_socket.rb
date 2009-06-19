@@ -1,9 +1,12 @@
 module ActiveSocket
+
   require 'rubygems'
   require 'socket'
   require 'activerecord'
+  require File.dirname(__FILE__) + '/../common/logger'
   require File.dirname(__FILE__) + '/connection'
   require File.dirname(__FILE__) + '/crud'
+  
   
   class Base < ActiveRecord::Base
     self.abstract_class = true
@@ -17,15 +20,22 @@ module ActiveSocket
     def pass_along_instance_method(meth_name, args)
       request = {:t => 'i', :o => self,  :m => meth_name, :a => args}
       response = self.class.communicate("passalong", self.class.to_s, request)
-    
-      #pass in the stray instance objects
-      obj = response[:o]
-      obj.simple_instance_variables.each do |iv|
-        self.instance_variable_set(iv.to_sym, obj.instance_variable_get(iv.to_sym))
-      end
       
+      if response
+        response = full_response[1]
+        #pass in the stray instance objects
+        obj = response[:o]
+        obj.simple_instance_variables.each do |iv|
+          self.instance_variable_set(iv.to_sym, obj.instance_variable_get(iv.to_sym))
+        end
+        
+        res = response[:r]
+      else
+        ActiveSocket.log.warn "failure in pass_along_instance_method"
+        res = false
+      end
       #return response
-      return response[:r]
+      return res
     end
     
     class << self # Class methods
@@ -54,6 +64,12 @@ module ActiveSocket
       def fetch_structure
         #fetch structure
         structure = communicate("structure",class_name)
+        
+        unless structure
+          ActiveSocket.log.warn "failure in fetch_structure"
+          return
+        end
+        
         #copy over custom methods
         custom_instance_methods = structure[:methods][:inst]
         custom_class_methods = structure[:methods][:class]

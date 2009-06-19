@@ -5,11 +5,23 @@ module ActiveSocket
     
     def find(*args)
       request = {:m => "find", :a => args}
-      communicate("read",self.to_s,request)
+      response = communicate("read",self.to_s,request)
+      if response
+        return response
+      else
+        ActiveSocket.log.warn "failure in ClassCrud.find"
+        return nil
+      end
     end
     
     def delete_all(conditions = nil)
-      communicate("delete",self.to_s,conditions)
+      response = communicate("delete",self.to_s,conditions)
+      if response
+        return response
+      else
+        ActiveSocket.log.warn "failure in ClassCrud.delete_all"
+        return false
+      end
     end
     
   end
@@ -30,6 +42,11 @@ module ActiveSocket
     
     def create
       response = self.class.communicate("create",self.class.to_s, self)
+      unless response
+        ActiveSocket.log.warn "failure in InstanceCrud.create"
+        return false
+      end
+      
       success = response[:success]
       obj = response[:obj]
       if success
@@ -58,13 +75,19 @@ module ActiveSocket
       response = self.class.communicate("update",self.class.to_s,request)
       if response
         self.send("changed_attributes").send("clear")
+      else
+        ActiveSocket.log.warn "failure in InstanceCrud.update"
       end
       return response
     end
     
     def destroy
       response = self.class.communicate("destroy",self.class.to_s,id)
-      freeze if response
+      if response
+        freeze
+      else
+        ActiveSocket.log.warn "failure in InstanceCrud.destroy"
+      end
     end
     
   end

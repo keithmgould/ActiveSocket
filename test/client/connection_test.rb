@@ -17,8 +17,6 @@ class ConnectionTest < Test::Unit::TestCase
     Thread.kill(@server)
   end
   
-  # Here we connect with the mini_server (see setup above),
-  # and use the passalong command to test basic communication.
   # In this test we create a local object, shoot it over to the server,
   # and ask the server if this obj is an Object.  we expect the response
   # to be true.
@@ -29,5 +27,11 @@ class ConnectionTest < Test::Unit::TestCase
     request = {:t => 'i', :o => obj, :m => "kind_of?", :a => Object}
     r = c.communicate("passalong", "Object", request)
     assert r[:r] == true
+  end
+  
+  # Test proper response when client can not find server
+  
+  def test_noserver
+    c = Connection.new("Object","localhost", 4011)
   end
 end
