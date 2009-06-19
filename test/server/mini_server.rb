@@ -3,13 +3,6 @@ require 'activerecord'
 require File.dirname(__FILE__) + '/../../server/active_socket.rb'
 include ActiveSocket
 
-module Global 
-  def log
-    @log ||= Logger.new("debug.log")
-  end
-end
-include Global
-Global.log.level = Logger::DEBUG
   
 ActiveRecord::Base.establish_connection(
     :adapter => "sqlite3",

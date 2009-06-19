@@ -10,5 +10,6 @@ module ActiveSocket
   require File.dirname(__FILE__) + '/../common/protocol'
   require File.dirname(__FILE__) + '/processors'
   require File.dirname(__FILE__) + '/server'
+  ActiveSocket.log.level = Logger::DEBUG
 
 end
