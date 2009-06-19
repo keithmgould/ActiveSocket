@@ -6,7 +6,7 @@ module ActiveSocket
   require File.dirname(__FILE__) + '/../common/logger'
   require File.dirname(__FILE__) + '/connection'
   require File.dirname(__FILE__) + '/crud'
-  
+  ActiveSocket.log.level = Logger::DEBUG
   
   class Base < ActiveRecord::Base
     self.abstract_class = true
