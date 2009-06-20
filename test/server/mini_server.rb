@@ -22,7 +22,13 @@ ActiveRecord::Schema.define do
 end
 
 class Blog < ActiveRecord::Base
-
+  def self.custom_class_method
+    "hello from a class method"
+  end
+  
+  def custom_instance_method
+    "hello from an instance method"
+  end
 end
 
 ActiveSocketServer.new(4010)

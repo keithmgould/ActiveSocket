@@ -22,7 +22,6 @@ module ActiveSocket
       response = self.class.communicate("passalong", self.class.to_s, request)
       
       if response
-        response = full_response[1]
         #pass in the stray instance objects
         obj = response[:o]
         obj.simple_instance_variables.each do |iv|
