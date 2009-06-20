@@ -8,6 +8,8 @@ module ActiveSocket
           command, model, body = message.chomp.split(":")
           ActiveSocket.log.debug "processing: #{command} on #{model}"
           case command
+            when 'exit'
+              exit_server 
             when 'passalong'
               response = passalong_object(model, body)
             when 'connection'
@@ -34,6 +36,11 @@ module ActiveSocket
          response = Protocol.pack("failure: unable to process message: #{$!}")
         end
         return (response + "\n")
+      end
+    
+      def exit_server
+        ActiveSocket.log.debug "Death Warrant!"
+        exit
       end
     
       def create_object(model, body)

@@ -3,7 +3,7 @@ require 'activerecord'
 require File.dirname(__FILE__) + '/../../server/active_socket.rb'
 include ActiveSocket
 
-  
+
 ActiveRecord::Base.establish_connection(
     :adapter => "sqlite3",
     :database => "test.sqlite3",
@@ -24,3 +24,5 @@ ActiveRecord::Schema.define do
 class Blog < ActiveRecord::Base
 
 end
+
+ActiveSocketServer.new(4010)

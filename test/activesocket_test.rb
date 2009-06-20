@@ -1,9 +1,13 @@
-#Test the entire ActiveSocket Suite...
+# Run the entire ActiveSocket Test Suite...
 
+# Bring the love.
 require 'test/unit'
 
-# Both client and server share the protocol class for communication.
+# Both client and server communicate with the Protocol class
 require 'common/protocol_test'
 
-# Test client commnicating with server via connection class.
+# Test client's Connection class.
 require 'client/connection_test'
+
+# Test client's CRUD actions
+require 'client/crud_test'

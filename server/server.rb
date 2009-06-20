@@ -6,7 +6,7 @@ module ActiveSocket
     def initialize(port) 
       @serverSocket = TCPServer.new(port) 
       @serverSocket.setsockopt( Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1 ) 
-      printf("ActiveSocket Server started on port %d\n", port)
+      ActiveSocket.log.debug("ActiveSocket Server started on port #{port.to_s}")
       while 1
         wait_for_client
       end
@@ -15,7 +15,7 @@ module ActiveSocket
     private
 
     def wait_for_client
-      ActiveSocket.log.debug "\nwaiting for a client"
+      ActiveSocket.log.debug("waiting for a client")
       while (@session = @serverSocket.accept) 
         help_client
         return if @session.closed?
@@ -23,7 +23,7 @@ module ActiveSocket
     end
 
     def help_client
-      ActiveSocket.log.debug "helping a client"
+      ActiveSocket.log.debug("helping a client")
       while 1
         wait_for_message
         return if @session.closed?
@@ -32,7 +32,7 @@ module ActiveSocket
 
     def wait_for_message
       if @session.eof?
-        ActiveSocket.log.debug "they left :("
+        ActiveSocket.log.debug("they left :(")
         @session.close
         return
       else
