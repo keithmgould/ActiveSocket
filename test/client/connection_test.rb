@@ -9,6 +9,9 @@ class ConnectionTest < Test::Unit::TestCase
     @server = Thread.new do
       system "ruby #{File.dirname(__FILE__)}/../server/mini_server.rb"
     end
+    
+    # wait for server to start up
+    sleep 1
   end
   
   def teardown
@@ -20,8 +23,6 @@ class ConnectionTest < Test::Unit::TestCase
   # and ask the server if this obj is an Object.  we expect the response
   # to be true.
   def test_communication
-    # wait for server to startup
-    sleep 1
     c = Connection.new("Object", "localhost", 4010)
     obj = Object.new
     request = {:t => 'i', :o => obj, :m => "kind_of?", :a => Object}
@@ -32,8 +33,6 @@ class ConnectionTest < Test::Unit::TestCase
   # Test proper response when client can not find server.
   # Note port does not match mini-server's port.
   def test_noserver
-    # wait for server to startup
-    sleep 1
     c = Connection.new("Object","localhost", 4011)
     obj = Object.new
     request = {:t => 'i', :o => obj, :m => "kind_of?", :a => Object}

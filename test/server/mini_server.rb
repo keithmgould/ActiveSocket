@@ -19,7 +19,7 @@ ActiveRecord::Schema.define do
       t.integer :author_id, :null => false
       t.string :title, :null => false
     end
-  end
+end
 
 class Blog < ActiveRecord::Base
 
