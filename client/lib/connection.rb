@@ -32,16 +32,12 @@ module ActiveSocket
       end
     
       if request
-        ActiveSocket.log.debug(("%10.6f" % Time.new.to_f) + ": packing.")
         packed_request = Protocol.pack(request)
-        ActiveSocket.log.debug(("%10.6f" % Time.new.to_f) + ": packing complete.")
         message ="#{request_type}:#{model}:#{packed_request}\n"
       else
         message = "#{request_type}:#{model}\n"
       end
-      ActiveSocket.log.debug(("%10.6f" % Time.new.to_f) + ": sending.")
       session.write(message)
-      ActiveSocket.log.debug(("%10.6f" % Time.new.to_f) + ": sending complete.")
       if session.eof?
         ActiveSocket.log.debug "disconnected."
         response = false

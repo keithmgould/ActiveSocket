@@ -43,11 +43,20 @@ module ActiveSocket
         str = Marshal::dump("Failure: could not Marshal::dump")
       end
       m = []
+      chunk = []
+      chunk_size = 1000
+      index = 0
       str.each_byte do |c|
+        index += 1
         h = c.to_s(16)
         h = "0" + h if h.size < 2
-        m << h
+        chunk << h
+        if index % chunk_size == 0
+          m += chunk
+          chunk = []
+        end
       end
+      m += chunk
       m.join
     end
     
