@@ -26,6 +26,8 @@ module ActiveSocket
               response = delete_object(model,body) 
             when 'destroy'
               response = destroy_object(model,body)
+            when 'pushfile'
+              response = push_file(model,body)
             else
               raise
           end
@@ -36,6 +38,13 @@ module ActiveSocket
          response = Protocol.pack("failure: unable to process message: #{$!}")
         end
         return (response + "\n")
+      end
+    
+      def push_file(model,body)
+        ActiveSocket.log.debug  "in push_file"
+        file = Protocol.unpack(body)
+        File.open(file[:name], 'w') { |f| f.write(file[:body])}
+        return Protocol.pack(true)
       end
     
       def exit_server

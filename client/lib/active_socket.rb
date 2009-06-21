@@ -41,6 +41,17 @@ module ActiveSocket
       attr_accessor :connection
       include ClassCrud
       
+      def transfer_to_service(path_to_file)
+        # check if file exists
+        return false unless File.exists?(path_to_file)
+        
+        # convert file to bytestring
+        file = {}
+        file[:name] = File.basename(path_to_file)
+        file[:body] = File.read(path_to_file)
+        @connection.communicate("pushfile", class_name, file)
+      end
+      
       def communicate(request_type, model, request = nil)
         @connection.communicate(request_type, model, request)
       end

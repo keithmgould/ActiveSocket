@@ -15,7 +15,16 @@ module ActiveSocket
     def self.unpack(str)
       marshalled_response = ''
       hexes = str.scan(/../)
-      hexes.each { |c| marshalled_response += c.hex.chr }
+      chunk_size = 1000
+      chunk = ''
+      hexes.each_with_index do |c,x|    
+        chunk += c.hex.chr 
+        if x % chunk_size == 0
+          marshalled_response += chunk
+          chunk = ''
+        end
+      end
+      marshalled_response += chunk
       begin
         obj = Marshal::load(marshalled_response)
       rescue
