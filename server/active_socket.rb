@@ -1,5 +1,9 @@
 module ActiveSocket
   
+  # Directory receiving files from Front-End.
+  # modify as needed:
+  DROPZONE = File.dirname(__FILE__)
+  
   #ruby libraries
   require "rubygems"
   require "socket"

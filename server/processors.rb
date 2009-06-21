@@ -43,7 +43,8 @@ module ActiveSocket
       def push_file(model,body)
         ActiveSocket.log.debug  "in push_file"
         file = Protocol.unpack(body)
-        File.open(file[:name], 'w') { |f| f.write(file[:body])}
+        drop_path = DROPZONE + "/#{file[:name]}"
+        File.open(drop_path, 'w') { |f| f.write(file[:body])}
         return Protocol.pack(true)
       end
     

@@ -3,8 +3,8 @@ module ActiveSocket
       
       @log ||= Logger.new(File.dirname(__FILE__) + "/../debug.log")
       
-      # Todo: add a commented out line showing how to
-      # replace this with the rails logger.
+      # Replace the above line with the following to use Rails logging:
+      # @log ||= Rails.logger
     
     end
     module_function :log
