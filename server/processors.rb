@@ -171,7 +171,7 @@ module ActiveSocket
         # Now take out instance methods associated with columns
         # as those methods should be local to the client
         c.columns.each do |s|
-          meths[:inst] = meths[:inst] - ["#{s[:name]}","#{s[:name]}=" ]
+          meths[:inst] = meths[:inst] - ["#{s.name}","#{s.name}=" ]
         end
         
         # We don't want to include the actual ConnectionAdapter.  
