@@ -167,8 +167,13 @@ module ActiveSocket
         meths = {}
         meths[:inst] = c.instance_methods - fake.instance_methods
         meths[:class] = c.methods - fake.methods
-      
-      
+        
+        # Now take out instance methods associated with columns
+        # as those methods should be local to the client
+        c.columns.each do |c|
+          meths[:inst] = meths[:inst] - ["#{c[:name]}","#{c[:name]}=" ]
+        end
+        
         # We don't want to include the actual ConnectionAdapter.  
         # So we loop through and take what we need.
         columns = []
