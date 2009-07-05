@@ -178,10 +178,13 @@ module ActiveSocket
         # So we loop through and take what we need.
         columns = []
         c.columns.each do |s|
-          c = {:name => s.name, :default => s.default, :sql_type => s.sql_type, :null => s.null}
-          columns << c
+          col = {:name => s.name, :default => s.default, :sql_type => s.sql_type, :null => s.null}
+          columns << col
         end
-        structure = {:cols => columns, :methods => meths}
+        
+        associations = c.reflections
+        
+        structure = {:cols => columns, :methods => meths, :assoc => associations}
         return Protocol.pack(structure)
       end
   end

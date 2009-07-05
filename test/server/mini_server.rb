@@ -19,9 +19,15 @@ ActiveRecord::Schema.define do
       t.integer :author_id, :null => false
       t.string :title, :null => false
     end
+    
+    create_table :posts do |t|
+      t.integer :blog_id, :null => false
+      t.string :body, :null => false
+    end
 end
 
 class Blog < ActiveRecord::Base
+  has_many :posts
   def self.custom_class_method
     "hello from a class method"
   end
@@ -29,6 +35,10 @@ class Blog < ActiveRecord::Base
   def custom_instance_method
     "hello from an instance method"
   end
+end
+
+class Post < ActiveRecord::Base
+  belongs_to :blog
 end
 
 ActiveSocketServer.new(4010)

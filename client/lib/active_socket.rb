@@ -85,6 +85,12 @@ module ActiveSocket
         custom_class_methods = structure[:methods][:class]
         augment_methods(custom_instance_methods, custom_class_methods)
         
+        # add associations
+        associations = structure[:assoc]
+        associations.each_pair do |m, association|
+          self.create_reflection(association.macro, m, association.options, self )
+        end
+        
         #copy over column structure
         cols = structure[:cols]
         cols.each do |col|
@@ -104,9 +110,8 @@ module ActiveSocket
         custom_instance_methods.each do |meth|
           define_method(meth.to_sym) { |*args| pass_along_instance_method(meth, args) }
         end
-        
       end
-      
+    
     end # Class Methods
   end # Base Class
 end #Module
