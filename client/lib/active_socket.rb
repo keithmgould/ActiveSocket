@@ -8,6 +8,9 @@ module ActiveSocket
   require File.dirname(__FILE__) + '/crud'
   ActiveSocket.log.level = Logger::DEBUG
   
+  class PassAlongError < StandardError; end
+  class FetchStructureError < StandardError; end
+  
   class Base < ActiveRecord::Base
     self.abstract_class = true
     class_inheritable_array :columns
@@ -31,7 +34,8 @@ module ActiveSocket
         res = response[:r]
       else
         ActiveSocket.log.warn "failure in pass_along_instance_method"
-        res = false
+        raise ActiveSocketError
+        #res = false
       end
       #return response
       return res
@@ -77,7 +81,7 @@ module ActiveSocket
         
         unless structure
           ActiveSocket.log.warn "failure in fetch_structure"
-          return
+          raise FetchStructureError
         end
         
         #copy over custom methods

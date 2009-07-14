@@ -6,12 +6,14 @@ include ActiveSocket
 
 ActiveRecord::Base.establish_connection(
     :adapter => "sqlite3",
-    :database => "test.sqlite3",
+    :database => "#{File.dirname(__FILE__)}/test.sqlite3",
     :pool => 3,
     :timeout => 5000)
 
 #first delete the database
-File.delete "test.sqlite3" if File.exists? "test.sqlite3"
+if File.exists? "#{File.dirname(__FILE__)}/test.sqlite3"
+  File.delete "#{File.dirname(__FILE__)}/test.sqlite3" 
+end
 
 #then create the database
 ActiveRecord::Schema.define do

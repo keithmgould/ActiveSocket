@@ -1,21 +1,35 @@
+require 'rubygems'
+require 'shoulda'
 require 'test/unit'
 require File.dirname(__FILE__) + '/../../common/protocol'
 include ActiveSocket
 
 class ProtocolTest < Test::Unit::TestCase
   
-  #Anything that is marshalable is a valid input
-  def test_simple_valid_protocol_inputs
-    inputs = ["Hello, World!", "", nil, true, false, -1, 0, :sym, ["a", "r", "r", "a", "y"], {"ha" => "sh"}]  
-    inputs.each do |input|
-      assert_valid_input(input)
+  context "The Protocol" do
+    context "given simple objects as inputs" do
+      setup do 
+        @inputs = ["Hello, World!", "", nil, true, false, -1, 0, :sym, ["a", "r", "r", "a", "y"], {"ha" => "sh"}]
+      end
+      
+      should "pass along the objects" do
+        @inputs.each do |input|
+          assert_valid_input(input)
+        end
+      end
     end
-  end
-  
-  def test_complex_valid_protocol_inputs
-    input = Object.new
-    input.instance_variable_set(:@foo, "bar")
-    assert_valid_input(input)
+    
+    context "given complex objects as inputs" do
+      setup do
+        @input = Object.new
+        @input.instance_variable_set(:@foo, "bar")
+      end
+      
+      should "pass along the objects" do 
+        assert_valid_input(@input)
+      end
+    end
+    
   end
   
   #take the input through a round trip

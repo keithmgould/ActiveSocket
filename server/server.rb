@@ -7,6 +7,7 @@ module ActiveSocket
       @serverSocket = TCPServer.new(port) 
       @serverSocket.setsockopt( Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1 ) 
       ActiveSocket.log.debug("ActiveSocket Server started on port #{port.to_s}")
+      puts "ActiveSocket Server started on port #{port.to_s}"
       while 1
         wait_for_client
       end

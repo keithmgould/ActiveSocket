@@ -1,6 +1,8 @@
 module ActiveSocket
   require File.dirname(__FILE__) + '/../../common/protocol'
   
+  class ConnectionError < StandardError; end
+  
   # The ActiveSocket Connection class serves a few functions:
   # 1) It overrides the ActiveRecord Connection class and via method missing
   #    passes requests over to the server.  We want to use method_missing as little
@@ -27,8 +29,8 @@ module ActiveSocket
       begin
         session = TCPSocket.open(@host, @port)
       rescue
-        ActiveSocket.log.warn "failure: could not open connection to server: #{$!}"
-        return false
+        ActiveSocket.log.warn "failure: could not open connection to server [#{@host}]:[#{@port}] => #{$!}"
+        raise ConnectionError
       end
     
       if request
