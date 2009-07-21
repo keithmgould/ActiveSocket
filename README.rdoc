@@ -24,18 +24,19 @@ The client is currently a plugin:
 
 	script/plugin install git@github.com:keithmgould/ActiveSocket-Client.git
 
-All you need to do on the server is include environment, the library and declare the port:
+All you need to do on the server is:
 
-
-	#require your environment
+	#require your environment (this should setup ActiveRecord and pull in your models)
 	require(File.join(File.dirname(__FILE__), 'config', 'environment'))
 
-	#assuming AS module required in environment...
+	#Require ActiveSocket module (this can be in environment.rb)
+	require File.join('/path/to/ActiveSocket/server/active_socket.rb')
+	
+	#This can also be in environment.rb
 	include ActiveSocket 
 
 	#start her up!
 	ActiveSocketServer.new(4001)
-
 
 == Use Case
 
