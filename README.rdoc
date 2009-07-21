@@ -37,6 +37,8 @@ All you need to do on the server is:
 
 	#start her up!
 	ActiveSocketServer.new(4001)
+	
+Here is a blog post describing an authentication server (with source code zipped at bottom):  http://www.activesocket.org/2009/06/authentication-with-activesocket.html
 
 == Use Case
 
