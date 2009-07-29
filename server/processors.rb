@@ -162,8 +162,14 @@ module ActiveSocket
         c = model.classify.constantize
 
         # gather the custom class and instance methods
-        # defined in our model...
+        # defined in our fake model...
         fake = c.const_defined?(:Faker) ? c.const_get(:Faker) : c.const_set("Faker", Class.new(ActiveRecord::Base))
+        
+        # even give our fake model the association methods
+        c.reflections.each_pair do |m, association|
+          fake.send association.macro.to_sym, m
+        end
+        
         meths = {}
         meths[:inst] = c.instance_methods - fake.instance_methods
         meths[:class] = c.methods - fake.methods

@@ -89,10 +89,12 @@ module ActiveSocket
         custom_class_methods = structure[:methods][:class]
         augment_methods(custom_instance_methods, custom_class_methods)
         
-        # add associations
+        # Add Associations
+        # Note: self.create_reflection does not work.
+        # Todo: sending way too much.  just need macro and name (m)
         associations = structure[:assoc]
         associations.each_pair do |m, association|
-          self.create_reflection(association.macro, m, association.options, self )
+          self.send association.macro.to_sym, m
         end
         
         #copy over column structure
