@@ -22,7 +22,7 @@ Currently, both client plugin and server are under 200 LoC.
 
 The client is currently a plugin:
 
-	script/plugin install git@github.com:keithmgould/ActiveSocket-Client.git
+	script/plugin install git@github.com:keithmgould/ActiveSocket.git
 
 All you need to do on the server is:
 
