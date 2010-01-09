@@ -38,9 +38,6 @@ All you need to do on the server is:
 	#start her up!
 	ActiveSocketServer.new(4001)
 	
-	#or optionally start in development mode...(verbose info to log)
-	ActiveSocketServer.new(4001,:development)
-	
 Here is a blog post describing an authentication server (with source code zipped at bottom):  http://www.activesocket.org/2009/06/authentication-with-activesocket.html
 
 == Use Case
@@ -66,10 +63,6 @@ Model (client side):
 	class Blog < ActiveSocket::Base
 		active_socket_settings :host => "27.4.4.8", :port => 4001
 	end
-	
-	# To place client-side ActiveSocket logging in development mode 
-	# place the following at the bottom of your environment file
-	# ActiveSocket::ENV = :development
 
 Usage (client side):
 
@@ -94,5 +87,16 @@ As you can see, the usage is transparent.  Same for other CRUD operations:
 	b.save
 	=> true
 
+== Logging
+
+Logs are found in the ActiveSocket directory as log.log, both client and server side.  By default ActiveSocket is in production mode, and only logs fatal errors.  However, if you want verbose logging:
+
+	# Server:
+	ActiveSocketServer.new(4001,:development)
+	
+	# Client:
+	# To place client-side ActiveSocket logging in development mode 
+	# place the following at the bottom of your environment file
+	ActiveSocket::ENV = :development
 
 Copyright (c) 2009 Keith Gould, released under the MIT license
