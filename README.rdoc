@@ -38,6 +38,9 @@ All you need to do on the server is:
 	#start her up!
 	ActiveSocketServer.new(4001)
 	
+	#or optionally start in development mode...(verbose info to log)
+	ActiveSocketServer.new(4001,:development)
+	
 Here is a blog post describing an authentication server (with source code zipped at bottom):  http://www.activesocket.org/2009/06/authentication-with-activesocket.html
 
 == Use Case

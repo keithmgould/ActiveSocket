@@ -28,9 +28,10 @@ module ActiveSocket
       begin
         obj = Marshal::load(marshalled_response)
       rescue
-        ActiveSocket.log.debug "failure: could not Marshal::load: #{$!}"
+        ActiveSocket.log.error "failure: could not Marshal::load: #{$!}"
         obj = "failure: could not Marshal::load: #{$!}"
       end
+      ActiveSocket.log.debug("unpacked: #{obj.inspect}")
       return obj
     end
 
@@ -38,8 +39,10 @@ module ActiveSocket
     # object -> string via marshal -> array of chars -> array of hex values -> string of concat hexs
     def self.pack(obj)
       begin
+        ActiveSocket.log.debug("packing object #{obj.inspect}")
         str = Marshal::dump(obj)
       rescue
+        ActiveSocket.log.error("Failure: could not Marshal::dump")
         str = Marshal::dump("Failure: could not Marshal::dump")
       end
       m = []

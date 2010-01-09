@@ -3,11 +3,12 @@ module ActiveSocket
     
     include Processors
     
-    def initialize(port) 
+    def initialize(port, environment = :production) 
+      ActiveSocket.const_set("ENV", environment)
       @serverSocket = TCPServer.new(port) 
       @serverSocket.setsockopt( Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1 ) 
-      ActiveSocket.log.debug("ActiveSocket Server started on port #{port.to_s}")
-      puts "ActiveSocket Server started on port #{port.to_s}"
+      ActiveSocket.log.debug("ActiveSocket Server started on port #{port.to_s} in #{ActiveSocket::ENV} mode")
+      puts "ActiveSocket Server started on port #{port.to_s} in #{ActiveSocket::ENV} mode"
       while 1
         wait_for_client
       end
@@ -33,7 +34,7 @@ module ActiveSocket
 
     def wait_for_message
       if @session.eof?
-        ActiveSocket.log.debug("they left :(")
+        ActiveSocket.log.debug("client disconnected :(")
         @session.close
         return
       else
