@@ -66,6 +66,10 @@ Model (client side):
 	class Blog < ActiveSocket::Base
 		active_socket_settings :host => "27.4.4.8", :port => 4001
 	end
+	
+	# To place client-side ActiveSocket logging in development mode 
+	# place the following at the bottom of your environment file
+	# ActiveSocket::ENV = :development
 
 Usage (client side):
 
