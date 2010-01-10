@@ -27,9 +27,14 @@ module ActiveSocket
       marshalled_response += chunk
       begin
         obj = Marshal::load(marshalled_response)
-      rescue
-        ActiveSocket.log.error "failure: could not Marshal::load: #{$!}"
-        obj = "failure: could not Marshal::load: #{$!}"
+      rescue ArgumentError, NameError => ex
+        msg = ex.message
+        if msg =~ /undefined class\/module/ && msg.split(' ').last.constantize
+            retry 
+        else
+            ActiveSocket.log.error "failure: could not Marshal::load: #{$!}"
+            raise
+        end
       end
       ActiveSocket.log.debug("unpacked: #{obj.inspect}")
       return obj
@@ -42,8 +47,8 @@ module ActiveSocket
         ActiveSocket.log.debug("packing object #{obj.inspect}")
         str = Marshal::dump(obj)
       rescue
-        ActiveSocket.log.error("Failure: could not Marshal::dump")
-        str = Marshal::dump("Failure: could not Marshal::dump")
+        ActiveSocket.log.error("Failure: could not Marshal::dump: #{$!}")
+        raise
       end
       m = []
       chunk = []
