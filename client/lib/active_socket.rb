@@ -78,9 +78,10 @@ module ActiveSocket
       def fetch_structure
         #fetch structure
         structure = communicate("structure",class_name)
+        ActiveSocket.log.debug "fetched structure: #{structure.inspect}"
         
         unless structure
-          ActiveSocket.log.warn "failure in fetch_structure"
+          ActiveSocket.log.error "failure in fetch_structure"
           raise FetchStructureError
         end
         
@@ -94,7 +95,7 @@ module ActiveSocket
         # Todo: sending way too much.  just need macro and name (m)
         associations = structure[:assoc]
         associations.each_pair do |m, association|
-          self.send association.macro.to_sym, m
+          self.send association.macro.to_sym, m, association.options
         end
         
         #copy over column structure
