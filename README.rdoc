@@ -1,44 +1,6 @@
 = ActiveSocket
 
-ActiveSocket allows instant Service Oriented Architecture (SOA).  ActiveSocket::Base extends ActiveRecord::Base, and over-rides only.  The actual model resides on the ActiveSocket server and the client (say, a rails app) hits the server when the model (service) is needed.  There is no API to create/learn (no REST methods to write, no Sinatra app to maintain, etc...); simply treat the model as if it were local.
-
-== Motivation
-
-As SOA becomes more prevalent in the Rails community, we need tools to allow us to build services quickly and easily.	  Micro web-frameworks such as Sinatra are good when the service is offered to strangers.  However when both the service and client are inside our control, there is no need to waste time with XML over HTTP over TCP/IP.  Furthermore, there is no need to waste time on routing (URL parsing), which is notoriously expensive.
-
-== ActiveSocket Knows Your Models
-
-Client side, at model initialization (which is app initialization in Rails production), ActiveSocket models hit the AS-server to determine the model's structure.  This means your ActiveSocket models will not only have proper columns defined (to assist with AR goodies), but any custom methods defined on your model server-side will be identified locally and properly handled (see example below.)
-
-== Benchmarks
-
-ActiveSocket vs Net/HTTP (xml web-service) yields a 3x speed performance, end to end.
-
-== Lines of Code
-
-Currently, both client plugin and server are under 200 LoC.
-
-== Install
-
-The client is currently a plugin:
-
-	script/plugin install git@github.com:keithmgould/ActiveSocket.git
-
-All you need to do on the server is:
-
-	#require your environment (this should setup ActiveRecord and pull in your models)
-	require(File.join(File.dirname(__FILE__), 'config', 'environment'))
-
-	#Require ActiveSocket module (this can be in environment.rb)
-	require File.join('/path/to/ActiveSocket/server/active_socket.rb')
-	
-	#This can also be in environment.rb
-	include ActiveSocket 
-
-	#start her up!
-	ActiveSocketServer.new(4001)
-	
-Here is a blog post describing an authentication server (with source code zipped at bottom):  http://www.activesocket.org/2009/06/authentication-with-activesocket.html
+ActiveSocket allows instant Service Oriented Architecture (SOA).  ActiveSocket::Base extends ActiveRecord::Base, and over-rides only where necessary.  The actual model resides on the ActiveSocket server and the client (say, a rails app) hits the server when the model (service) is needed.  There is no API to create/learn (no REST methods to write, no Sinatra app to maintain, etc...); simply treat the ActiveSocket model as if it were local.
 
 == Use Case
 
@@ -87,6 +49,28 @@ As you can see, the usage is transparent.  Same for other CRUD operations:
 	b.save
 	=> true
 
+== Install
+
+The client is currently a plugin:
+
+	script/plugin install git@github.com:keithmgould/ActiveSocket.git
+
+All you need to do on the server is:
+
+	#require your environment (this should setup ActiveRecord and pull in your models)
+	require(File.join(File.dirname(__FILE__), 'config', 'environment'))
+
+	#Require ActiveSocket module (this can be in environment.rb)
+	require File.join('/path/to/ActiveSocket/server/active_socket.rb')
+
+	#This can also be in environment.rb
+	include ActiveSocket 
+
+	#start her up!
+	ActiveSocketServer.new(4001)
+
+  Here is a blog post describing an authentication server (with source code zipped at bottom):  http://www.activesocket.org/2009/06/authentication-with-activesocket.html
+
 == Logging
 
 Logs are found in the ActiveSocket directory as log.log, both client and server side.  By default ActiveSocket is in production mode, and only logs fatal errors.  However, if you want verbose logging:
@@ -98,5 +82,21 @@ Logs are found in the ActiveSocket directory as log.log, both client and server 
 	# To place client-side ActiveSocket logging in development mode 
 	# place the following at the bottom of your environment file
 	ActiveSocket::ENV = :development
+
+== Motivation
+
+As SOA becomes more prevalent in the Rails community, we need tools to allow us to build services quickly and easily.	  Micro web-frameworks such as Sinatra are good when the service is offered to strangers.  However when both the service and client are inside our control, there is no need to waste time with XML over HTTP over TCP/IP.  Furthermore, there is no need to waste time on routing (URL parsing), which is notoriously expensive.
+
+== ActiveSocket Knows Your Models
+
+Client side, at model initialization (which is app initialization in Rails production), ActiveSocket models hit the AS-server to determine the model's structure.  This means your ActiveSocket models will not only have proper columns defined (to assist with AR goodies), but any custom methods defined on your model server-side will be identified locally and properly handled (see example below.)
+
+== Benchmarks
+
+ActiveSocket vs Net/HTTP (xml web-service) yields a 3x speed performance, end to end.
+
+== Lines of Code
+
+Currently, both client plugin and server are under 200 LoC.
 
 Copyright (c) 2009 Keith Gould, released under the MIT license
