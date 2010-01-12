@@ -1,6 +1,6 @@
 = ActiveSocket
 
-ActiveSocket allows instant Service Oriented Architecture (SOA).  ActiveSocket::Base extends ActiveRecord::Base, and over-rides only where necessary so that the actual model resides on the other side of a TCP socket connection.  There is no API to create/learn; simply treat the model as if it were local.
+ActiveSocket allows instant Service Oriented Architecture (SOA).  ActiveSocket::Base extends ActiveRecord::Base, and over-rides only.  The actual model resides on the ActiveSocket server and the client (say, a rails app) hits the server when the model (service) is needed.  There is no API to create/learn (no REST methods to write, no Sinatra app to maintain, etc...); simply treat the model as if it were local.
 
 == Motivation
 
