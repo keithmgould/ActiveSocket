@@ -2,7 +2,7 @@ module ActiveSocket
 
   require 'rubygems'
   require 'socket'
-  require 'activerecord'
+  require 'active_record'
   require File.dirname(__FILE__) + '/../../common/logger'
   require File.dirname(__FILE__) + '/connection'
   require File.dirname(__FILE__) + '/crud'

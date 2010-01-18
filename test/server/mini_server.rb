@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'activerecord'
+require 'active_record'
 require File.dirname(__FILE__) + '/../../server/active_socket.rb'
 include ActiveSocket
 
