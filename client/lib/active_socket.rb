@@ -60,12 +60,22 @@ module ActiveSocket
         @connection.communicate(request_type, model, request)
       end
       
+      def scoped_methods
+        super.tap do |methods|
+          #puts "#{self.class_name} returning scope: #{methods.inspect}"
+        end
+      end
+      
       private
       
       # this guy just passes methods along to server.
       def pass_along_class_method(meth_name, args)
-        request = {:t => 'c', :m => meth_name, :a => args}
-        communicate("passalong", class_name, request)
+        #puts "scoped methods: #{self.scoped_methods.inspect}"
+        request = {:t => 'c', :m => meth_name, :a => args, :s => self.scoped_methods }
+        #puts "passing along: #{class_name} => #{request.inspect}"
+        response = communicate("passalong", class_name, request)
+        #puts "response was: #{response.class} => #{response.inspect}"
+        return response
       end
       
       def active_socket_settings(args)
@@ -78,7 +88,7 @@ module ActiveSocket
       def fetch_structure
         #fetch structure
         structure = communicate("structure",class_name)
-        ActiveSocket.log.debug "fetched structure: #{structure.inspect}"
+        #ActiveSocket.log.debug "fetched structure: #{structure.inspect}"
         
         unless structure
           ActiveSocket.log.error "failure in fetch_structure"

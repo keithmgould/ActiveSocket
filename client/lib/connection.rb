@@ -29,7 +29,7 @@ module ActiveSocket
       begin
         session = TCPSocket.open(@host, @port)
       rescue
-        ActiveSocket.log.warn "failure: could not open connection to server [#{@host}]:[#{@port}] => #{$!}"
+        ActiveSocket.log.error "failure: could not open connection to server [#{@host}]:[#{@port}] => #{$!}"
         raise ConnectionError
       end
     

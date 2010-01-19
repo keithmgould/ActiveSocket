@@ -34,8 +34,9 @@ module ActiveSocket
         rescue
          # Note: we should never need to get rescued.
          # If we do, fortify offending method below.
-         ActiveSocket.log.warn "failed in process_message: #{$!}"
+         ActiveSocket.log.error "failed in process_message: #{$!}"
          response = Protocol.pack("failure: unable to process message: #{$!}")
+         raise "failure: unable to process message: #{$!}"
         end
         return (response + "\n")
       end
@@ -118,8 +119,15 @@ module ActiveSocket
         
         #if type is a class
         if request[:t] == "c"
-          response = model.classify.constantize.send(request[:m],*request[:a]) 
-        
+          ActiveSocket.log.debug "request: #{request.inspect}"
+          klass = model.classify.constantize
+          ActiveSocket.log.debug "klass: #{klass.class_name}"
+          ActiveSocket.log.debug "before crap: #{klass.send(:scoped_methods).inspect}"
+          crap = klass.send(:scoped_methods).concat request[:s]
+          ActiveSocket.log.debug "crap: #{crap.inspect}"
+          ActiveSocket.log.debug "after crap: #{klass.send(:scoped_methods).inspect}"
+          response = klass.send(request[:m],*request[:a])
+          ActiveSocket.log.debug "response to send: #{response.class_name} => #{response.inspect}"
         #else type is an object
         else
           #ensure the object is of proper type:

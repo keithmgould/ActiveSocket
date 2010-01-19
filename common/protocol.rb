@@ -36,7 +36,7 @@ module ActiveSocket
             raise
         end
       end
-      ActiveSocket.log.debug("unpacked: #{obj.inspect}")
+      #ActiveSocket.log.debug("unpacked: #{obj.inspect}")
       return obj
     end
 
@@ -44,7 +44,13 @@ module ActiveSocket
     # object -> string via marshal -> array of chars -> array of hex values -> string of concat hexs
     def self.pack(obj)
       begin
-        ActiveSocket.log.debug("packing object #{obj.inspect}")
+        #ActiveSocket.log.debug("packing object #{obj.inspect}")
+        if obj.class == ActiveRecord::NamedScope::Scope
+          #puts "packing a #{obj.class}"
+          #puts "proxy_options: #{obj.proxy_options.inspect}"
+          #puts "proxy_scope: #{obj.proxy_scope.inspect}"
+        end
+        #puts obj if obj.is_a?(String)
         str = Marshal::dump(obj)
       rescue
         ActiveSocket.log.error("Failure: could not Marshal::dump: #{$!}")
